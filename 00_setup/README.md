@@ -91,6 +91,8 @@ Windows Terminal Preview Microsoft.WindowsTerminal.Preview 1.22.2912.0 winget
 名前                        ID            バージョン ソース
 ------------------------------------------------------------
 Windows Subsystem for Linux Microsoft.WSL 2.1.5.0    winget 
+
+> winget install Microsoft.WSL --version 2.1.5.0
 ```
 
 #### ◆ Windows Terminal をアップデートするには
