@@ -63,7 +63,7 @@ Resources:
                 Action:
                   - s3:GetObject
                   - s3:PutObject
-                Resource: !Sub "arn:aws:s3:::${SourceCodeBucketName}/${SourceCodeKey}"
+                Resource: !Sub "arn:aws:s3:::${SourceCodeBucketName}/*"
   PythonLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -100,9 +100,12 @@ Resources:
                   with zipfile.ZipFile(zip_file, 'r') as zf:
                       for member in zf.namelist():
                           try:
-                              file_data = zf.read(member)
-                              file_name = os.path.basename(member)
+                              file_name = member
                               print(f"{file_name=}")
+                              # 空のディレクトリはスキップ
+                              if not file_name:
+                                  continue
+                              file_data = zf.read(member)
                               upload_key = f"unzipped/{os.path.splitext(zip_key)[0]}/{file_name}"
                               s3.put_object(Bucket=bucket_name, Key=upload_key, Body=file_data)
                               print(f"uploaded: {upload_key=}")
