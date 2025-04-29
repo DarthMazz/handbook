@@ -1,0 +1,20 @@
+{
+  "output": {
+    "message": {
+      "content": [
+        {
+          "text": "横浜は、日本の神奈川県にある都市で、東京に次ぐ日本第二の都市であり、重要な港湾都市です。以下に横浜に関する主要な情報をまとめます。\n\n### 地理と位置\n- **位置**: 神奈川県の東部、東京の南西約30kmに位置しています。\n- **地形**: 東京湾に面しており、自然の良港として知られています。\n\n### 人口\n- 人口は約370"
+        }
+      ], 
+      "role": "assistant"
+    }
+  }, 
+  "stopReason": "max_tokens",
+  "usage": {
+    "inputTokens": 6,
+    "outputTokens": 100,
+    "totalTokens": 106,
+    "cacheReadInputTokenCount": 0,
+    "cacheWriteInputTokenCount": 0
+  }
+}
