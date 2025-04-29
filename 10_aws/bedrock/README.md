@@ -29,3 +29,11 @@ Source text
 Une EC2 instance est un serveur virtuel dans le AWS Cloud. Lorsque vous lancez une EC2 instance, le type d'instance que vous spécifiez détermine le matériel disponible pour votre instance. Chaque type d'instance offre un équilibre différent entre les ressources de calcul, de mémoire, de réseau et de stockage. Pour plus d'informations, consultez le guide des types d' EC2 instances Amazon.
 </p></body></head></html>
 ```
+
+## APIレファレンス
+
+[Nova Pro](https://ap-northeast-1.console.aws.amazon.com/bedrock/home?region=ap-northeast-1#/model-catalog/serverless/amazon.nova-pro-v1:0)
+
+[InvokeModel](https://docs.aws.amazon.com/ja_jp/bedrock/latest/APIReference/API_runtime_InvokeModel.html#API_runtime_InvokeModel_Example_5)
+
+[APAC Nova Pro](https://docs.aws.amazon.com/ja_jp/bedrock/latest/userguide/inference-profiles-support.html)
