@@ -84,7 +84,7 @@ Windows Terminal Preview Microsoft.WindowsTerminal.Preview 1.22.2912.0 winget
 
 ### WSL
 
-#### ◆ Windows Terminal をインストールするには
+#### ◆ WSL をインストールするには
 
 ```bash
 > winget search Microsoft.WSL
@@ -123,5 +123,3 @@ sudo apt upgrade -y
 ```bash
 sudo apt install unattended-upgrades -y
 ```
-
-
