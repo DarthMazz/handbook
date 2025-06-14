@@ -123,3 +123,28 @@ sudo apt upgrade -y
 ```bash
 sudo apt install unattended-upgrades -y
 ```
+
+
+## AlmaLinux
+
+```bash
+sudo dnf update -y
+```
+
+セキュリティアップデータの確認
+
+```bash
+sudo dnf check-update --security
+```
+
+セキュリティアップデータのみ更新
+
+```bash
+sudo dnf update --security
+```
+
+PODMANをインストール
+
+```bash
+sudo dnf install -y podman
+```
