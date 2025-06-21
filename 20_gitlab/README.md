@@ -1,6 +1,10 @@
 # GitLab のインストール
 
+
 ## 環境
+
+
+- os バージョン
 
 ```bash
 $ cat /etc/os-release
@@ -25,6 +29,15 @@ REDHAT_SUPPORT_PRODUCT_VERSION="9.6"
 SUPPORT_END=2032-06-01
 ```
 
+- カーネルバージョン
+
+```bash
+$ cat /proc/version
+Linux version 5.15.167.4-microsoft-standard-WSL2 (root@f9c826d3017f) (gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.37) #1 SMP Tue Nov 5 00:21:55 UTC 2024
+```
+
+- docker バージョン
+
 ```bash
 $ docker --version
 Docker version 28.2.2, build e6534b4
@@ -43,6 +56,8 @@ sudo systemctl start docker
 sudo systemctl enable docker
 sudo usermod -aG docker $(whoami)
 ```
+
+- usermod を適用するために一度シェルを再起動する
 
 
 ## vi インストール
@@ -67,7 +82,7 @@ sudo mkdir -p /srv/gitlab/config /srv/gitlab/logs /srv/gitlab/data
 ### docker-compose.yaml ファイル作成
 
 ```bash
-mkdir container/gitlab
+mkdir -p container/gitlab
 cd container/gitlab
 vi docker-compose.yml 
 ```
@@ -78,7 +93,7 @@ vi docker-compose.yml
 version: '3.8'
 services:
   gitlab:
-    image: 'gitlab/gitlab-ce:latest'
+    image: 'gitlab/gitlab-ce:17.8.7-ce.0'
     container_name: gitlab
     hostname: 'gitlab.example.com' # ここをあなたのドメイン名またはIPアドレスに置き換えてください
     restart: always
@@ -122,7 +137,7 @@ sudo firewall-cmd --reload
 初期パスワードは、24時間のみ有効
 
 ```bash
-sudo docker compose exec gitlab grep 'Password:' /etc/gitlab/initial_root_password
+docker compose exec gitlab grep 'Password:' /etc/gitlab/initial_root_password
 ```
 
 
@@ -133,7 +148,6 @@ http://<GitLabのIPアドレス>にアクセスして ユーザ root 初期パ�
 Adminページから rootユーザパスワードを変更する
 
 
-
 ## Windows側からWSL2側へのポートフォーワード設定
 
 ```bash
@@ -141,7 +155,9 @@ netsh interface portproxy add v4tov4 listenport=80 listenaddress=0.0.0.0 connect
 netsh interface portproxy add v4tov4 listenport=443 listenaddress=0.0.0.0 connectport=443 connectaddress=<WSL2のAlma LinuxのIPアドレス>
 ```
 
+
 # GitLab Runnerのインストール
+
 
 ### ディレクトリ作成
 
@@ -151,9 +167,11 @@ netsh interface portproxy add v4tov4 listenport=443 listenaddress=0.0.0.0 connec
 sudo mkdir -p /srv/gitlab-runner/config
 ```
 
+
 ### docker-compose.yaml ファイル作成
 
 ```bash
+cd
 mkdir container/gitlab-runner
 cd container/gitlab-runner
 vi docker-compose.yml 
@@ -165,11 +183,11 @@ vi docker-compose.yml
 version: '3.8'
 services:
   gitlab-runner:
-    image: gitlab/gitlab-runner:alpine-v17.5.5 # 最新の安定版を使用することを推奨します
+    image: gitlab/gitlab-runner:alpine-v17.8.5 # 最新の安定版を使用することを推奨します
     restart: always
     container_name: gitlab-runner
     volumes:
-      - ./config:/etc/gitlab-runner # 設定ファイルをホストに永続化
+      - /srv/gitlab-runner/config:/etc/gitlab-runner # 設定ファイルをホストに永続化
       - /var/run/docker.sock:/var/run/docker.sock # Docker-in-Docker (dind) を使用する場合に必要
     environment:
       # DinD (Docker in Docker) を有効にするための設定
@@ -177,13 +195,16 @@ services:
       DOCKER_TLS_CERTDIR: "" # DinD で TLS を無効化（テスト環境向け）
 ```
 
+
 ## GitLab-Runner を起動する
 
 ```bash
 docker compose up -d
 ```
 
+
 ## GitLab-Runner の登録
+
 
 ### 登録トークンと GitLab URLをメモする
 
@@ -191,10 +212,11 @@ docker compose up -d
 
 - 「Register an instance runner」または「New project runner」をクリックし、登録トークンと GitLab URL をメモします。
 
+
 ### GitLab-Runnerを GitLabに登録する
 
 ```bash
-ocker-compose exec gitlab-runner gitlab-runner register
+docker compose exec gitlab-runner gitlab-runner register
 ```
 
 - プロンプトが表示されたら、以下の情報を入力します。
@@ -245,7 +267,9 @@ shutdown_timeout = 0
     network_mtu = 0
 ```
 
+
 ## GitLab-Runner の動作確認
+
 
 ### .gitlab-ci.yml の作成
 
@@ -271,6 +295,8 @@ build_image:
   services:
     - docker:28.2.2-dind-alpine3.22 # GitLab Runner内でDockerデーモンをサービスとして起動
 ```
+
+
 ### Dockerfileを作成する
 
 - Dockerfile
