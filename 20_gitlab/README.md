@@ -114,6 +114,57 @@ services:
     shm_size: '256m' # シェアメモリのサイズ。CI/CDのRunnerなどで必要になる場合があります。
 ```
 
+- docker-compose.yml
+
+container registryを起動する場合
+
+```yaml
+version: '3.8'
+services:
+  gitlab:
+    image: 'gitlab/gitlab-ce:18.2.1-ce.0' # 指定されたバージョン
+    container_name: gitlab
+    hostname: gitlab.local # コンテナ内部のホスト名
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        # GitLabの外部URL (MacのDocker Desktopの場合、localhostを使用)
+        external_url 'http://localhost:18081' # GitLab Web UIへのアクセスポートを18081にする
+
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222 # SSHポート（任意）
+
+        # Container Registryの設定 (HTTPアクセス)
+        # registry_external_urlは、Container RegistryにアクセスするためのURLです。
+        # MacのDocker Desktopの場合、localhostを使用し、異なるポートを割り当てます。
+        registry_external_url 'http://localhost:5005'
+        gitlab_rails['registry_enabled'] = true
+        gitlab_rails['registry_host'] = 'localhost' # レジストリのホスト名
+        gitlab_rails['registry_port'] = 5005 # レジストリのポート
+
+        # HTTPアクセスなのでSSL/Let's Encrypt関連はすべて無効化または削除
+        nginx['listen_port'] = 80 # GitLab NginxがHTTPリクエストを待ち受けるポート
+        nginx['listen_https'] = false # HTTPSを無効化
+        nginx['redirect_http_to_https'] = false # HTTPからHTTPSへのリダイレクトを無効化
+
+        # registry_nginxに関するHTTPS設定も同様に無効化
+        registry_nginx['listen_port'] = 5005 # レジストリNginxがHTTPリクエストを待ち受けるポート
+        registry_nginx['listen_https'] = false # HTTPSを無効化
+        registry_nginx['redirect_http_to_https'] = false # HTTPからHTTPSへのリダイレクトを無効化
+
+        # Container Registryのストレージ設定（デフォルトはローカルファイルシステム）
+        # registry['storage']['filesystem']['path'] = "/var/opt/gitlab/gitlab-rails/shared/registry" # デフォルト
+
+    ports:
+      - '18081:80' # GitLab Web UIへのアクセスポートを18081にマッピング
+      - '5005:5005' # Container Registryへのアクセスポートを5000にマッピング
+      - '2222:22' # SSHポートをマッピング
+    volumes:
+      - './config:/etc/gitlab'
+      - './logs:/var/log/gitlab'
+      - './data:/var/opt/gitlab'
+    shm_size: '256m'
+    restart: always
+```
+
 
 ## GitLab を起動する
 
