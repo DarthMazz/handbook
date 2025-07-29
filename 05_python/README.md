@@ -94,3 +94,75 @@ if __name__ == "__main__":
     # また、AWS認証情報が設定されていることを確認してください（例: 環境変数 AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY など）。
     asyncio.run(main())
 ```
+
+### Singletonパターン応用
+
+アクセス先ごとにオブジェクトを生成して取得する処理
+
+```python
+class ResourceConnection:
+    """
+    アクセス先ごとのリソースを表すクラス
+    （例: データベース接続、外部APIクライアントなど）
+    """
+    def __init__(self, target_address):
+        self.target_address = target_address
+        self.connection_status = "Disconnected"
+        print(f"DEBUG: 新しい接続オブジェクトを生成しました: {self.target_address}")
+
+    def connect(self):
+        self.connection_status = "Connected"
+        print(f"INFO: {self.target_address} に接続しました。")
+
+    def disconnect(self):
+        self.connection_status = "Disconnected"
+        print(f"INFO: {self.target_address} から切断しました。")
+
+    def __str__(self):
+        return f"Connection to {self.target_address} (Status: {self.connection_status})"
+
+# オブジェクトを管理するための辞書
+_resource_connections = {}
+
+def get_resource_connection(target_address):
+    """
+    指定されたアクセス先に対応するResourceConnectionオブジェクトを返すファクトリ関数。
+    存在しない場合は新規作成し、存在する場合は既存のものを返す。
+    """
+    if target_address not in _resource_connections:
+        print(f"DEBUG: '{target_address}' の新しい接続を生成中...")
+        _resource_connections[target_address] = ResourceConnection(target_address)
+    else:
+        print(f"DEBUG: '{target_address}' の既存の接続を返します。")
+    return _resource_connections[target_address]
+
+# --- 利用例 ---
+
+# 異なるアクセス先へのアクセス
+db_conn1 = get_resource_connection("database_A")
+db_conn1.connect()
+
+api_conn1 = get_resource_connection("api_service_X")
+api_conn1.connect()
+
+# 同じアクセス先へのアクセス（既存のオブジェクトが返される）
+db_conn2 = get_resource_connection("database_A")
+api_conn2 = get_resource_connection("api_service_X")
+
+print("\n--- オブジェクトの同一性チェック ---")
+print(f"db_conn1 と db_conn2 は同じオブジェクトか？: {db_conn1 is db_conn2}")
+print(f"api_conn1 と api_conn2 は同じオブジェクトか？: {api_conn1 is api_conn2}")
+
+# 別の新しいアクセス先
+db_conn3 = get_resource_connection("database_B")
+db_conn3.connect()
+
+print("\n--- 現在の接続ステータス ---")
+print(db_conn1)
+print(api_conn1)
+print(db_conn3)
+
+# 切断処理
+db_conn1.disconnect()
+print(db_conn2) # db_conn1と同じオブジェクトなので、ステータスも連動して変わる
+```
