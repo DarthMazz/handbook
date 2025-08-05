@@ -166,3 +166,12 @@ print(db_conn3)
 db_conn1.disconnect()
 print(db_conn2) # db_conn1と同じオブジェクトなので、ステータスも連動して変わる
 ```
+
+### requirements.lockからrequirements.txtを作成する
+```bash
+# ロックファイルを生成
+rye lock
+
+# ロックファイルからrequirements.txtを生成
+sed '/-e/d' requirements.lock > requirements.txt
+```
