@@ -1,4 +1,4 @@
-```
+```bash
 aws cloudformation deploy \
     --template-file my_lambda_template.yaml \
     --stack-name your-lambda-stack \
