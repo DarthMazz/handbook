@@ -1,12 +1,8 @@
-# 各種開発に必要なセットアップ方法をまとめる
-
-## Windows アプリケーション
-
-### WinGet (Windows Package Manager)
+# WinGet (Windows Package Manager)
 
 https://learn.microsoft.com/ja-jp/windows/package-manager/winget/
 
-#### ◆ WinGet をインストールするには
+## WinGet をインストールするには
 
 管理者権限でコマンドプロンプトまたはPowerShellを開きます。
 
@@ -15,7 +11,7 @@ WinGet をインストールする
 winget install --global --scope user winget-cli
 ```
 
-#### ◆ WinGet でアップグレードするには
+## WinGet でアップグレードするには
 
 upgrade コマンドでアップグレード対象のパッケージを表示する
 
@@ -48,10 +44,9 @@ Microsoft はサードパーティのパッケージに対して責任を負わ�
 インストールが完了しました
 ```
 
+# Git for Windows
 
-### Win Git
-
-#### ◆ Git for Windows をインストールするには
+## Git for Windows をインストールするには
 
 ```bash
 > winget search Git.Git
@@ -62,15 +57,15 @@ Git  Git.Git 2.47.0.2   winget
 > winget install Git.Git --version 2.47.0.2 
 ```
 
-#### ◆ Git for Windows をアップデートするには
+## Git for Windows をアップデートするには
 
 ```bash
 git update-git-for-windows
 ```
 
-### Windows Terminal
+# Windows Terminal
 
-#### ◆ Windows Terminal をインストールするには
+## Windows Terminal をインストールするには
 
 ```bash
 > winget search Microsoft.WindowsTerminal
@@ -82,9 +77,9 @@ Windows Terminal Preview Microsoft.WindowsTerminal.Preview 1.22.2912.0 winget
 > winget install Microsoft.WindowsTerminal --version 1.21.2911.0
 ```
 
-### WSL
+# WSL
 
-#### ◆ WSL をインストールするには
+## WSL をインストールするには
 
 ```bash
 > winget search Microsoft.WSL
@@ -95,56 +90,8 @@ Windows Subsystem for Linux Microsoft.WSL 2.1.5.0    winget
 > winget install Microsoft.WSL --version 2.1.5.0
 ```
 
-#### ◆ Windows Terminal をアップデートするには
+## Windows Terminal をアップデートするには
 
 ```bash
 wsl --update
-```
-
-## Ubuntu
-
-アップデートを行うには、パッケージリストを更新して実行する
-
-パッケージリスト更新
-
-```bash
-sudo apt update -y
-```
-
-全てのパッケージを更新
-
-```bash
-sudo apt update -y
-sudo apt upgrade -y
-```
-
-セキュリティアップデートのみを実行
-
-```bash
-sudo apt install unattended-upgrades -y
-```
-
-
-## AlmaLinux
-
-```bash
-sudo dnf update -y
-```
-
-セキュリティアップデータの確認
-
-```bash
-sudo dnf check-update --security
-```
-
-セキュリティアップデータのみ更新
-
-```bash
-sudo dnf update --security
-```
-
-PODMANをインストール
-
-```bash
-sudo dnf install -y podman
 ```
