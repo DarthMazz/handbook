@@ -68,6 +68,17 @@ services:
         hard: -1
     networks:
       - opensearch-net
+  opensearch-dashboards:
+      image: opensearchproject/opensearch-dashboards:3.2.0
+      container_name: opensearch-dashboards
+      ports:
+        - "5601:5601"
+      environment:
+        OPENSEARCH_HOSTS: '["https://opensearch-node1:9200"]'
+      networks:
+        - opensearch-net
+      depends_on:
+        - opensearch-node1
 
 volumes:
   opensearch-data:
@@ -112,3 +123,24 @@ $ curl -XGET https://localhost:9200 -ku admin:${OPENSEARCH_INITIAL_ADMIN_PASSWOR
   "tagline" : "The OpenSearch Project: https://opensearch.org/"
 }
 ```
+
+## インストール (OpenSearch Dashboards)
+
+
+1. docker-compose.ymlを作成する
+
+
+```yaml
+opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:3.2.0
+    container_name: opensearch-dashboards
+    ports:
+      - "5601:5601"
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch-node1:9200"]'
+    networks:
+      - opensearch-net
+    depends_on:
+      - opensearch-node1
+```
+
