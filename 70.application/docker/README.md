@@ -39,3 +39,11 @@ Docker Compose version v2.39.2
 - 参考
 
     [Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+
+
+## sudo 無しで docker コマンドを利用する
+
+```bash
+sudo gpasswd -a <ユーザー名> docker
+newgrp docker
+```
