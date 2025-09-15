@@ -1,0 +1,29 @@
+services:
+  opensearch-node1:
+    image: opensearchproject/opensearch:3.2.0
+    container_name: opensearch-node1
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node1
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD}  # 最低8文字, 大文字, 小文字, 数字, 記号の全てを含む必要あり
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    networks:
+      - opensearch-net
+
+volumes:
+  opensearch-data:
+
+networks:
+  opensearch-net:
+    external: true  # 既存のネットワークを使用する
